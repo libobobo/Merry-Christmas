@@ -19,12 +19,24 @@
         #map div {
             position: absolute;
         }
+
+        button {
+            margin-top: 20px;
+            width: 100px;
+            height: 100px;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
 <div id = "map">
 
 </div>
+<button class = "up" id = "up">↑</button>
+<button class = "left" id = "left">←</button>
+<br/>
+<button class = "right" id = "right">→</button>
+<button class = "down" id = "down">↓</button>
 <script>
     //每个功能部分都是相互独立都设置一个自调用函数进行包裹
     (function () {
@@ -131,8 +143,6 @@
             //计算蛇头距离左/顶部的距离
             this.offsetLeft = this.body[this.body.length - 1].x * this.width;
             this.offsetTop = this.body[this.body.length - 1].y * this.height;
-
-//            this.init();//重新绘制
         };
         window.Snake = Snake;
     }());
@@ -149,6 +159,7 @@
             this.snake.init();
             this.snakeRun();
             this.snakeDirection();
+            this.snakeButtonDirection();
         };
         Game.prototype.snakeRun = function () {
             var _this = this;
@@ -216,6 +227,29 @@
                             _this.snake.direction = "down";
                         break;
                 }
+            }
+        };
+        Game.prototype.snakeButtonDirection = function () {
+            var _this = this;
+            var upBtn = document.getElementById("up");
+            var leftBtn = document.getElementById("left");
+            var rightBtn = document.getElementById("right");
+            var downBtn = document.getElementById("down");
+            upBtn.onclick = function () {
+                if (_this.snake.direction != "down")
+                    _this.snake.direction = "up";
+            };
+            leftBtn.onclick = function () {
+                if (_this.snake.direction != "right")
+                    _this.snake.direction = "left";
+            };
+            rightBtn.onclick = function () {
+                if (_this.snake.direction != "left")
+                    _this.snake.direction = "right";
+            };
+            downBtn.onclick = function () {
+                if (_this.snake.direction != "up")
+                    _this.snake.direction = "down";
             }
         };
         window.Game = Game;
