@@ -1,0 +1,58 @@
+/*初始化*/
+body,ul,h1,h2,h3,h4,h5,h6,p,input,button,dl,dd,dt,form,hr{
+	margin: 0;
+	padding: 0;
+}
+body{
+	font: 14px "microsoft yahei";
+	color: #000;
+}
+img{
+	border: 0 none;
+	vertical-align: middle;
+}
+li{
+	list-style: none;
+}
+a{
+	text-decoration: none;
+	color: #000;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight: 400;
+}
+input,button{
+	border: 0 none;
+	/*清除轮廓线*/
+	outline-style: none;
+}
+a:hover{
+	color: #00a4ff;
+}
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.clearfix:after,.clearfix:before {
+	content: "";
+	display: table;
+}
+.clearfix:after{
+	clear: both;
+}
+/*兼容ie浏览器清除浮动*/
+.clearfix {
+	zoom: 1;
+}
+.w{
+	width: 1000px;
+	margin: 0 auto;
+}
+/*溢出的文字省略号显示*/
+.txt_of{
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
