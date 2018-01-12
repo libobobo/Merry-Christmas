@@ -1,20 +1,53 @@
-html,body,.page_one,.page_two,.page_three,.page_four{
+html, body, .page_one, .page_two, .page_three, .page_four {
   width: 100%;
   height: 100%;
+  position: relative;
 }
-.page_one{
+
+.page_one {
   background: url("../img/v_bg_01.jpg") no-repeat;
   background-size: cover;
+  position: relative;
 }
-.page_two{
+
+.page_two {
   background: url("../img/v_bg_02.jpg") no-repeat;
   background-size: cover;
 }
-.page_three{
+
+.page_three {
   background: url("../img/v_bg_03.jpg") no-repeat;
   background-size: cover;
+
 }
-.page_four{
+
+.page_four {
   background: url("../img/v_bg_04.jpg") no-repeat;
   background-size: cover;
+}
+
+.section .title {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  width: 90px;
+  margin-left: -45px;
+  text-align: center;
+}
+.section .title h6 {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+.section .title h6.active {
+  opacity: 1;
+  top: 30px;
+  transition: all 0.5s;
+}
+.section .title h6.leave {
+  opacity: 0;
+  transition: all 0.5s;
+
 }
