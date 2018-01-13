@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head lang = "en">
+    <meta charset = "UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .map {
+            position: relative;
+            width: 320px;
+            height: 570px;
+            margin: 0 auto;
+            background: url("background.png");
+        }
+
+        .map div {
+            position: absolute;
+        }
+
+        .map span {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div class = "map" id = "map"></div>
+<script>
+    //方块
+    (function () {
+        function Block(options) {
+            this.width = options.width || 10;
+            this.height = options.height || 10;
+            this.map = options.map;
+
+            this.s = [//长方形
+                {x: 16, y: 0, bgColor: "orange", type: "s"},
+                {x: 16, y: 1, bgColor: "orange", type: "s"},
+                {x: 16, y: 2, bgColor: "orange", type: "s"},
+                {x: 16, y: 3, bgColor: "orange", type: "s"}
+            ];
+            this.l = [//L形
+                {x: 16, y: 0, bgColor: "orange", type: "l"},
+                {x: 17, y: 0, bgColor: "orange", type: "l"},
+                {x: 18, y: 0, bgColor: "orange", type: "l"},
+                {x: 18, y: 1, bgColor: "orange", type: "l"},
+                {x: 18, y: 2, bgColor: "orange", type: "l"},
+                {x: 18, y: 3, bgColor: "orange", type: "l"}
+            ];
+            this.k = [//正方形
+                {x: 16, y: 0, bgColor: "orange", type: "k"},
+                {x: 17, y: 0, bgColor: "orange", type: "k"},
+                {x: 16, y: 1, bgColor: "orange", type: "k"},
+                {x: 17, y: 1, bgColor: "orange", type: "k"}
+            ];
+            this.q = [//
+                {x: 16, y: 0, bgColor: "orange", type: "q"},
+                {x: 16, y: 1, bgColor: "orange", type: "q"},
+                {x: 17, y: 1, bgColor: "orange", type: "q"},
+                {x: 18, y: 1, bgColor: "orange", type: "q"},
+                {x: 18, y: 2, bgColor: "orange", type: "q"}
+            ];
+            this.t = [//
+                {x: 15, y: 2, bgColor: "orange", type: "t"},
+                {x: 16, y: 2, bgColor: "orange", type: "t"},
+                {x: 17, y: 2, bgColor: "orange", type: "t"},
+                {x: 17, y: 1, bgColor: "orange", type: "t"},
+                {x: 18, y: 2, bgColor: "orange", type: "t"},
+                {x: 19, y: 2, bgColor: "orange", type: "t"}
+            ];
+            this.body = [this.k, this.s, this.l, this.q, this.t];
+            //当前
+            this.current = 0;
+            this.elements = [];
+            //是否有一个在运动
+            this.flag = true;
+            //运动到底端的图形数组
+            this.arr = [];
+            //保存所有的坐标值 y值相等且 x值够32个 占满一排
+            this.count = [];
+        }
+
+        Block.prototype.init = function () {
+
+            //删除掉移动之前的位置
+            for (var j = this.elements.length - 1; j >= 0; j--) {
+                this.map.removeChild(this.elements[j]);
+            }
+            this.elements = [];
+            if (this.flag) {
+                var index = parseInt(Math.random() * this.body.length);//随机落下一个
+                this.flag = false;
+                this.current = index;
+            }
+            var body = this.body[this.current];
+            for (var i = 0; i < body.length; i++) {
+                var div = document.createElement("div");
+                div.style.width = this.width + "px";
+                div.style.height = this.height + "px";
+                div.style.backgroundColor = body[i].bgColor;
+                div.style.left = body[i].x * 10 + "px";
+                div.style.top = body[i].y * 10 + "px";
+                this.elements.push(div);
+                this.map.appendChild(div);
+            }
+        };
+        //删除满足条件的一行
+        Block.prototype.delete = function () {
+            var count = this.count;
+            var obj = {};
+            for (var i = 0; i < count.length; i++) {
+                if (obj[count[i].y]) {
+                    obj[count[i].y] = obj[count[i].y] + 1;
+                } else {
+                    obj[count[i].y] = 1;
+                }
+            }
+            //删除掉之前的
+            for (var k in obj) {
+                if (obj[k] == 32) {
+                    var spans = document.getElementsByTagName("span");
+                    for (var j = spans.length - 1; j >= 0; j--) {
+                        this.map.removeChild(spans[j]);
+                    }
+                    for (var n = count.length - 1; n >= 0; n--) {
+                        if (count[n].y == k) {
+                            count.splice(n, 1);
+                        } else {
+                            var span = document.createElement("span");
+                            span.style.width = this.width + "px";
+                            span.style.height = this.height + "px";
+                            span.style.backgroundColor = count[n].bgColor;
+                            span.style.left = count[n].x * 10 + "px";
+                            if (n < k) {
+                                count[n].y = count[n].y + 1;
+                            }
+                            span.style.top = count[n].y * 10 + "px";
+                            this.map.appendChild(span);
+                        }
+                    }
+                    obj[k] = 0;
+                }
+            }
+        };
+        //绘制到达底端的图形
+        Block.prototype.draw = function () {
+            for (var i = 0; i < this.arr.length; i++) {
+
+                var span = document.createElement("span");
+                span.style.width = this.width + "px";
+                span.style.height = this.height + "px";
+                span.style.backgroundColor = this.arr[i].bgColor;
+                span.style.left = this.arr[i].x * 10 + "px";
+                span.style.top = this.arr[i].y * 10 + "px";
+                this.map.appendChild(span);
+            }
+            this.arr = [];
+        };
+        //重置运动过的图形的坐标
+        Block.prototype.reset = function (arr) {
+            var s = [//长方形
+                {x: 16, y: 0, bgColor: "orange", type: "s"},
+                {x: 16, y: 1, bgColor: "orange", type: "s"},
+                {x: 16, y: 2, bgColor: "orange", type: "s"},
+                {x: 16, y: 3, bgColor: "orange", type: "s"}
+            ];
+            var l = [//L形
+                {x: 16, y: 0, bgColor: "orange", type: "l"},
+                {x: 17, y: 0, bgColor: "orange", type: "l"},
+                {x: 18, y: 0, bgColor: "orange", type: "l"},
+                {x: 18, y: 1, bgColor: "orange", type: "l"},
+                {x: 18, y: 2, bgColor: "orange", type: "l"},
+                {x: 18, y: 3, bgColor: "orange", type: "l"}
+            ];
+            var k = [//正方形
+                {x: 16, y: 0, bgColor: "orange", type: "k"},
+                {x: 17, y: 0, bgColor: "orange", type: "k"},
+                {x: 16, y: 1, bgColor: "orange", type: "k"},
+                {x: 17, y: 1, bgColor: "orange", type: "k"}
+            ];
+            var q = [//
+                {x: 16, y: 0, bgColor: "orange", type: "q"},
+                {x: 16, y: 1, bgColor: "orange", type: "q"},
+                {x: 17, y: 1, bgColor: "orange", type: "q"},
+                {x: 18, y: 1, bgColor: "orange", type: "q"},
+                {x: 18, y: 2, bgColor: "orange", type: "q"}
+            ];
+            var t = [//
+                {x: 15, y: 2, bgColor: "orange", type: "t"},
+                {x: 16, y: 2, bgColor: "orange", type: "t"},
+                {x: 17, y: 2, bgColor: "orange", type: "t"},
+                {x: 17, y: 1, bgColor: "orange", type: "t"},
+                {x: 18, y: 2, bgColor: "orange", type: "t"},
+                {x: 19, y: 2, bgColor: "orange", type: "t"}
+            ];
+            var str = arr[0].type;
+            var newArr = [];
+            switch (str) {
+                case "s":
+                    newArr = s;
+                    break;
+                case "l":
+                    newArr = l;
+                    break;
+                case "k":
+                    newArr = k;
+                    break;
+                case "q":
+                    newArr = q;
+                    break;
+                case "t":
+                    newArr = t;
+                    break;
+            }
+            for (var i = 0; i < newArr.length; i++) {
+                arr[i].x = newArr[i].x;
+                arr[i].y = newArr[i].y;
+            }
+        };
+        Block.prototype.move = function () {
+            var body = this.body[this.current];
+            for (var i = 0; i < body.length; i++) {
+                body[i].y = body[i].y + 1;
+            }
+        };
+        window.Block = Block;
+    }());
+    //游戏管理者
+    (function () {
+        function WeGame(options) {
+            this.block = options.block;
+            this.map = options.map;
+        }
+
+        WeGame.prototype.init = function () {
+            this.block.init();
+            this.start();
+            this.direction();
+        };
+        WeGame.prototype.start = function () {
+            var lock = false;
+            var timer = setInterval(function () {
+                this.block.move();
+                var body = this.block.body[this.block.current];
+                //把 body数组按照y排序 判断最大的y值是否到底
+                body.sort(function (a, b) {
+                    return body[0].y - body[1].y;
+                });
+                var count = this.block.count;
+                if (count.length > 0) {
+                    for (var k = 0; k < count.length; k++) {
+                        if (lock) {
+                            break;
+                        }
+                        for (var h = 0; h < body.length; h++) {
+                            if (lock) {
+                                break;
+                            }
+                            //正在下落的与以下落的坐标比较全等 则落在一起
+                            lock = (body[h].y === count[k].y - 1) && (body[h].x === count[k].x);
+                            if (count[k].y - 2 === 0) {
+                                clearInterval(timer);
+                                alert("Game Over");
+                            }
+                        }
+                    }
+                }
+                //此处减去10 是为了位置移动后会多出10
+                if (lock || body[body.length - 1].y * this.block.width == this.map.offsetHeight - 10) {
+                    this.block.flag = true;
+                    lock = false;
+                    //到达底端之后 保存此次运动的图形的坐标
+                    for (var j = 0; j < body.length; j++) {
+                        this.block.arr.push({x: body[j].x, y: body[j].y, bgColor: "red"});
+                        this.block.count.push({x: body[j].x, y: body[j].y, bgColor: "red"});
+                    }
+                    this.block.draw();
+                    //运动过后的值要重置
+                    this.block.reset(body);
+                    return;
+                }
+                //如果一行被铺满则删除该行
+                this.block.delete();
+
+                this.block.init();
+            }.bind(this), 100);
+        };
+        WeGame.prototype.direction = function () {
+            document.onkeydown = function (e) {
+                var _e = e || window.event;
+                var body = this.block.body[this.block.current];
+                body.sort(function (a, b) {
+                    return body[1].x - body[0].x;
+                });
+                switch (_e.keyCode) {
+                    case 37:
+                        for (var i = 0; i < body.length; i++) {
+
+                            body[i].x = body[i].x - 1;
+                        }
+                        break;
+                    case 39:
+                        for (var n = 0; n < body.length; n++) {
+                            body[n].x = body[n].x + 1;
+                        }
+                        break;
+                }
+            }.bind(this);
+        };
+        window.WeGame = WeGame;
+
+    }());
+
+    var map = document.getElementById("map");
+    var we_game = new WeGame({
+        block: new Block({map: map}),
+        map: map
+    });
+    we_game.init();
+
+</script>
+</body>
+</html>
