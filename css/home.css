@@ -1,0 +1,60 @@
+.page_one .box{
+  width: 300px;
+  height: 300px;
+  margin: 100px auto;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(30deg);
+  animation: updown 3s linear 3s infinite alternate;
+}
+@keyframes updown{
+  0%{
+    transform: rotateX(-30deg) rotateY(30deg);
+  }
+  100%{
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+.page_one .box li{
+  width: 100px;
+  height: 100px;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  float: left;
+  position: relative;
+}
+
+.page_one .box>div{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5
+}
+.page_one .box:hover{
+  animation-play-state: paused;
+}
+
+.page_one .box .front{
+  /*background-color: deeppink;*/
+  transform: translateZ(150px);
+}
+.page_one .box .behind{
+  /*background-color: yellow;*/
+  transform: translateZ(-150px);
+}
+.page_one .box .left{
+  /*background-color: greenyellow;*/
+  transform: rotateY(-90deg) translateZ(150px);
+}
+.page_one .box .right{
+  /*background-color: red;*/
+  transform: rotateY(90deg) translateZ(150px);
+}
+.page_one .box .top{
+  /*background-color: deepskyblue;*/
+  transform: rotateX(90deg) translateZ(150px);
+}
+.page_one .box .bottom{
+  /*background-color: purple;*/
+  transform: rotateX(-90deg) translateZ(150px);
+}
