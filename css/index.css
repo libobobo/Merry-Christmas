@@ -3,7 +3,12 @@ html, body, .page_one, .page_two, .page_three, .page_four {
   height: 100%;
   position: relative;
 }
-
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+/*ï¿½ï¿½Ò»Ò³*/
 .page_one {
   background: url("../img/v_bg_01.jpg") no-repeat;
   background-size: cover;
@@ -39,7 +44,7 @@ html, body, .page_one, .page_two, .page_three, .page_four {
   position: absolute;
   top: 5px;
   left: 50%;
-  /*ÒÆ¶¯×ÔÉíµÄÒ»°ë*/
+  /*ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½*/
   transform: translateX(-50%);
   opacity: 0;
 }
@@ -59,18 +64,86 @@ html, body, .page_one, .page_two, .page_three, .page_four {
 .section .title h2, h6 {
   cursor: pointer;
 }
-
-/*µÚÈýÒ³*/
+.page_one img{
+  position: absolute;
+  bottom: 200px;
+  display: none;
+  z-index: 10;
+}
+.img_rotate{
+  transform: rotate(145deg);
+}
+/*ï¿½Ú¶ï¿½Ò³*/
+.page_two .pillar{
+  position: absolute;
+  width: 80px;
+  height: 150px;
+  bottom: 0;
+  left: 100px;
+  background-color: green;
+  z-index: 5;
+}
+.page_two img{
+  position: absolute;
+  bottom: 0;
+  width: 85px;
+  left: 100px;
+  z-index: 2;
+}
+.page_two span{
+  position: absolute;
+  left: 460px;
+  width: 12px;
+  height: 12px;
+  bottom: 0;
+  z-index: 1;
+  background-color: #944b2a;
+}
+.page_two .wall{
+  position: absolute;
+  width: 100px;
+  height: 20px;
+  background-color: #944b2a;
+  bottom: 120px;
+  left:550px;
+}
+.page_two .mushroom{
+  position: absolute;
+  left: 620px;
+  bottom: 220px;
+  width: 40px;
+  z-index: 1;
+}
+.changeSize{
+  animation: changeSize 1s infinite;
+}
+@keyframes changeSize{
+  0%{
+    width:85px;
+  }
+  50%{
+    width:110px;
+  }
+  100%{
+    width:85px;
+  }
+}
+.show{
+  display: none;
+}
+/*ï¿½ï¿½ï¿½ï¿½Ò³*/
 .page_three p {
   color: white;
   margin-bottom: 15px;
 }
-
+.page_three_content{
+  margin: 300px auto;
+}
 .page_three img {
   border: 1px solid white;
 }
 
-/*µÚËÄÒ³*/
+/*ï¿½ï¿½ï¿½ï¿½Ò³*/
 .page_four .learn {
   background-color: #2d6ea7;
   padding: 0 20px;

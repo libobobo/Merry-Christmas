@@ -47,8 +47,13 @@ a:hover{
 	zoom: 1;
 }
 .w{
+	position: relative;
 	width: 1200px;
 	margin: 0 auto;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-top: 0.1px solid #fff;
+	/*overflow: hidden;*/
 }
 /*溢出的文字省略号显示*/
 .txt_of{
